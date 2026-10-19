@@ -177,10 +177,10 @@ The chart, table and exports share one server-side filter, so they always agree.
 
 ![Data quality page](docs/images/quality.png)
 
-**Price data.** The SEC does not publish stock prices, so the chart needs a source: a free
-[Tiingo](https://www.tiingo.com) API key, a CSV of daily prices you download yourself, or the
-optional Yahoo Finance provider (`pip install "form4clean[yfinance]"`). Yahoo needs no key but
-uses an unofficial feed that can break, so it is never installed or chosen automatically. The
+**Price data.** The SEC does not publish stock prices, so the chart needs a source: the
+optional Yahoo Finance provider (`pip install "form4clean[yfinance]"`) or a CSV of daily prices
+you download yourself. Yahoo needs no key but uses an unofficial feed that can break, so it is
+never installed or chosen automatically. The
 chart only draws once one is configured in Settings, and Form4Clean never shows placeholder
 prices. Everything else works without prices. See [docs/dashboard.md](docs/dashboard.md).
 

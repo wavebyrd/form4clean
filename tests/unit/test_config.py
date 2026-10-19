@@ -19,7 +19,7 @@ def test_invalid_email_rejected(tmp_path: Path) -> None:
 
 
 def test_save_and_load_round_trip(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    for var in ("FORM4CLEAN_SEC_EMAIL", "FORM4CLEAN_PRICE_PROVIDER", "FORM4CLEAN_TIINGO_API_KEY"):
+    for var in ("FORM4CLEAN_SEC_EMAIL", "FORM4CLEAN_PRICE_PROVIDER"):
         monkeypatch.delenv(var, raising=False)
     settings = load_settings(tmp_path, contact_email="me@example.com", price_provider="csv")
     path = save_settings(settings)

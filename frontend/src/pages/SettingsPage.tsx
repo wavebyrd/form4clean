@@ -21,7 +21,6 @@ function SettingsForm({ s }: { s: Settings }) {
   const [email, setEmail] = React.useState(s.contact_email ?? '')
   const [rate, setRate] = React.useState(String(s.requests_per_second))
   const [provider, setProvider] = React.useState(s.price_provider)
-  const [tiingoKey, setTiingoKey] = React.useState('')
   const [saving, setSaving] = React.useState(false)
   const [error, setError] = React.useState<unknown>(null)
   const [saved, setSaved] = React.useState(false)
@@ -36,9 +35,7 @@ function SettingsForm({ s }: { s: Settings }) {
         contact_email: email.trim() || null,
         requests_per_second: Number(rate),
         price_provider: provider,
-        ...(tiingoKey.trim() ? { tiingo_api_key: tiingoKey.trim() } : {}),
       })
-      setTiingoKey('')
       setSaved(true)
       await qc.invalidateQueries()
     } catch (err) {
@@ -87,23 +84,6 @@ function SettingsForm({ s }: { s: Settings }) {
                 ))}
               </NativeSelect>
             </div>
-            {provider === 'tiingo' ? (
-              <div>
-                <Label htmlFor="tiingo">Tiingo API key</Label>
-                <Input
-                  id="tiingo"
-                  type="password"
-                  autoComplete="off"
-                  placeholder={s.tiingo_api_key_set ? 'Saved (enter a new key to replace it)' : 'Paste your free key'}
-                  value={tiingoKey}
-                  onChange={(e) => setTiingoKey(e.target.value)}
-                />
-                <p className="mt-1 text-xs text-muted">
-                  Free at tiingo.com. End-of-day prices, cached locally for 12 hours. The key is stored in{' '}
-                  <span className="font-mono">{s.data_directory}</span> on this computer.
-                </p>
-              </div>
-            ) : null}
             {provider === 'yahoo' ? (
               <p className="text-xs text-muted">
                 No key needed, but this uses Yahoo Finance&apos;s unofficial data feed through the community yfinance

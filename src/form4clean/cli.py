@@ -90,7 +90,6 @@ def config(
     price_provider: Annotated[
         str | None, typer.Option(help=f"Price source for the chart: {', '.join(PROVIDERS)}.")
     ] = None,
-    tiingo_key: Annotated[str | None, typer.Option(help="Free Tiingo API key.")] = None,
 ) -> None:
     """Show or change settings. Settings are saved in the data directory."""
     with handled():
@@ -100,7 +99,6 @@ def config(
             "app_name": app_name,
             "requests_per_second": rate,
             "price_provider": price_provider,
-            "tiingo_api_key": tiingo_key,
         }
         changes = {k: v for k, v in changes.items() if v is not None}
         if price_provider and price_provider not in PROVIDERS:
@@ -121,7 +119,6 @@ def config(
         )
         table.add_row("Requests per second", str(settings.requests_per_second))
         table.add_row("Price provider", settings.price_provider)
-        table.add_row("Tiingo API key", "set" if settings.tiingo_api_key else "not set")
         console.print(table)
 
 

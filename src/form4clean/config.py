@@ -49,7 +49,6 @@ class Settings(BaseModel):
     timeout_seconds: float = 30.0
     submissions_ttl_hours: float = 6.0
     price_provider: str = "none"
-    tiingo_api_key: str | None = None
     csv_price_dir: Path | None = None
 
     @field_validator("contact_email")
@@ -108,18 +107,15 @@ _ENV_MAP: dict[str, str] = {
     "FORM4CLEAN_SEC_APP_NAME": "app_name",
     "FORM4CLEAN_REQUESTS_PER_SECOND": "requests_per_second",
     "FORM4CLEAN_PRICE_PROVIDER": "price_provider",
-    "FORM4CLEAN_TIINGO_API_KEY": "tiingo_api_key",
     "FORM4CLEAN_CSV_PRICE_DIR": "csv_price_dir",
 }
 
-# Fields that may be saved to config.json. API keys are included so the dashboard's settings
-# page can store them; the file lives in the user's own data directory.
+# Fields that may be saved to config.json.
 PERSISTED_FIELDS = (
     "contact_email",
     "app_name",
     "requests_per_second",
     "price_provider",
-    "tiingo_api_key",
     "csv_price_dir",
 )
 

@@ -228,7 +228,6 @@ export interface Settings {
   user_agent: string | null
   requests_per_second: number
   price_provider: string
-  tiingo_api_key_set: boolean
   csv_price_dir: string
   providers: { name: string; label: string }[]
 }

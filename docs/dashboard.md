@@ -17,7 +17,7 @@ The dashboard is served by the same local process as the API. There are no accou
 | Transactions | Sortable, filterable table with column filters, column chooser, resizable columns, expandable rows and CSV/Parquet export |
 | Data Quality | Pipeline counts, status distribution, missing values, every issue with its explanation and affected records, amendment links |
 | Export | Filtered or full cleaned data, raw rows, the quality report or the manifest, as CSV, Parquet or JSON, optionally point-in-time |
-| Settings | SEC contact email, request rate, price provider and key |
+| Settings | SEC contact email, request rate and price provider |
 
 The filter bar is shared by the chart and the table, and filtering happens on the server, so
 the markers, the table and any export always contain the same records.
@@ -49,14 +49,11 @@ The SEC does not publish stock prices. Choose a provider in Settings:
 | Provider | Cost | Notes |
 |---|---|---|
 | None (default) | Free | No price chart. Everything else works. |
-| Tiingo | Free API key from [tiingo.com](https://www.tiingo.com) | End-of-day prices, cached locally for 12 hours |
 | Yahoo Finance (optional) | Free, no key. Install with `pip install "form4clean[yfinance]"` | Uses Yahoo's unofficial feed through the community [yfinance](https://github.com/ranaroussi/yfinance) package. Not installed by default, and can break or be throttled when Yahoo changes its site. Prices are adjusted for splits. Cached locally for 12 hours |
 | CSV | Free | Daily bars from `~/.form4clean/prices/TICKER.csv` (`date,open,high,low,close,volume`). Historical-data downloads from Nasdaq.com work as-is. |
 
-Tiingo prices are used unadjusted, so chart prices line up with the per-share prices insiders
-reported at the time; after a stock split the chart shows the jump. Yahoo adjusts every price
-for splits, so before a split the chart sits below the prices insiders reported. CSV prices are drawn
-exactly as they are in the file.
+Yahoo adjusts every price for splits, so before a split the chart sits below the per-share
+prices insiders reported at the time. CSV prices are drawn exactly as they are in the file.
 
 The chart states the provider and that data is end-of-day. If prices are missing or the provider
 fails, the page says so; it never draws placeholder prices. To add a provider, subclass

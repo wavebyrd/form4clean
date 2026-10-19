@@ -106,7 +106,6 @@ def _filter_part(query: DataQuery) -> TransactionFilter:
 class SettingsUpdate(BaseModel):
     contact_email: str | None = None
     price_provider: str | None = None
-    tiingo_api_key: str | None = None
     requests_per_second: float | None = None
 
 
@@ -171,7 +170,6 @@ def create_app(service: Form4Service | None = None) -> FastAPI:
             "user_agent": f"{s.app_name} {s.contact_email}" if s.contact_email else None,
             "requests_per_second": s.requests_per_second,
             "price_provider": s.price_provider,
-            "tiingo_api_key_set": bool(s.tiingo_api_key),
             "csv_price_dir": str(s.prices_dir),
             "providers": [{"name": p.name, "label": p.label} for p in PROVIDERS.values()],
         }

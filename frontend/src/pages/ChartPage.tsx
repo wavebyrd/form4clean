@@ -268,8 +268,8 @@ export function ChartPage() {
               />
             ) : (
               <EmptyState title="No price chart" icon={<LineChart className="size-6" />} className="h-full">
-                Form4Clean never draws placeholder prices. Add a free Tiingo API key, a CSV of
-                daily prices or the optional Yahoo Finance provider in Settings to plot insider activity on the stock chart. The
+                Form4Clean never draws placeholder prices. Choose Yahoo Finance or a CSV of daily
+                prices in Settings to plot insider activity on the stock chart. The
                 transactions table and exports work without prices.
               </EmptyState>
             )}

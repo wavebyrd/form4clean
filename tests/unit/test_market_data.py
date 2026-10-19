@@ -7,7 +7,6 @@ from datetime import date
 from importlib.machinery import ModuleSpec
 from pathlib import Path
 
-import httpx
 import pandas as pd
 import pytest
 
@@ -16,7 +15,6 @@ from form4clean.market_data.providers import (
     CsvProvider,
     NoProvider,
     PriceDataError,
-    TiingoProvider,
     YahooProvider,
     get_provider,
     read_price_csv,
@@ -26,7 +24,7 @@ from form4clean.market_data.providers import (
 def test_no_provider_explains_how_to_enable(settings: Settings) -> None:
     message = NoProvider(settings).configured()
     assert message
-    assert "Tiingo" in message
+    assert "Yahoo Finance" in message
 
 
 def test_csv_standard_format(tmp_path: Path) -> None:
@@ -62,42 +60,6 @@ def test_csv_provider_missing_file_says_where(settings: Settings) -> None:
     provider = CsvProvider(settings)
     with pytest.raises(PriceDataError, match=r"EXRB\.csv"):
         asyncio.run(provider.daily_bars("EXRB", date(2025, 1, 1), date(2025, 2, 1)))
-
-
-def test_tiingo_requires_key(settings: Settings) -> None:
-    assert TiingoProvider(settings).configured()
-
-
-def test_tiingo_parses_response(settings: Settings) -> None:
-    keyed = settings.model_copy(update={"tiingo_api_key": "k"})
-
-    def handler(request: httpx.Request) -> httpx.Response:
-        assert request.headers["Authorization"] == "Token k"
-        return httpx.Response(
-            200,
-            json=[
-                {
-                    "date": "2025-03-03T00:00:00.000Z",
-                    "open": 1.0,
-                    "high": 2.0,
-                    "low": 0.5,
-                    "close": 1.5,
-                    "volume": 100,
-                }
-            ],
-        )
-
-    provider = TiingoProvider(keyed, transport=httpx.MockTransport(handler))
-    bars = asyncio.run(provider.daily_bars("EXRB", date(2025, 3, 1), date(2025, 3, 5)))
-    assert bars[0].date == date(2025, 3, 3)
-    assert bars[0].close == 1.5
-
-
-def test_tiingo_bad_key(settings: Settings) -> None:
-    keyed = settings.model_copy(update={"tiingo_api_key": "bad"})
-    provider = TiingoProvider(keyed, transport=httpx.MockTransport(lambda r: httpx.Response(401)))
-    with pytest.raises(PriceDataError, match="rejected the API key"):
-        asyncio.run(provider.daily_bars("EXRB", date(2025, 3, 1), date(2025, 3, 5)))
 
 
 def test_unknown_provider(settings: Settings) -> None:

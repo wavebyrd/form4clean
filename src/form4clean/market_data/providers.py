@@ -6,7 +6,6 @@ says where it came from and whether it is delayed, and a missing provider produc
 
 Providers:
 
-* ``tiingo``: Tiingo end-of-day prices. Requires a free API key (https://www.tiingo.com).
 * ``yahoo``: Yahoo Finance prices through the community ``yfinance`` package. No key, but it
   uses Yahoo's unofficial data feed, can break when Yahoo changes it, and is not installed by
   default: ``pip install "form4clean[yfinance]"``.
@@ -27,8 +26,6 @@ from dataclasses import dataclass, field
 from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Any, ClassVar
-
-import httpx
 
 from ..config import Settings
 
@@ -92,69 +89,12 @@ class NoProvider(PriceProvider):
 
     def configured(self) -> str | None:
         return (
-            "No price provider is configured. Add a free Tiingo API key, a CSV file or the "
-            "optional Yahoo Finance provider in Settings to see the price chart. Insider data "
-            "works without one."
+            "No price provider is configured. Choose Yahoo Finance or a CSV file in Settings to "
+            "see the price chart. Insider data works without one."
         )
 
     async def daily_bars(self, symbol: str, start: date, end: date) -> list[Bar]:
         return []
-
-
-class TiingoProvider(PriceProvider):
-    name = "tiingo"
-    label = "Tiingo (free API key)"
-    url = "https://api.tiingo.com/tiingo/daily/{symbol}/prices"
-
-    def __init__(self, settings: Settings, transport: httpx.AsyncBaseTransport | None = None):
-        super().__init__(settings)
-        self._transport = transport
-
-    def configured(self) -> str | None:
-        if not self.settings.tiingo_api_key:
-            return (
-                "Tiingo needs a free API key. Create one at https://www.tiingo.com and add "
-                "it in Settings or set FORM4CLEAN_TIINGO_API_KEY."
-            )
-        return None
-
-    async def daily_bars(self, symbol: str, start: date, end: date) -> list[Bar]:
-        problem = self.configured()
-        if problem:
-            raise PriceDataError(problem)
-        params = {
-            "startDate": start.isoformat(),
-            "endDate": end.isoformat(),
-            "resampleFreq": "daily",
-            "format": "json",
-        }
-        headers = {"Authorization": f"Token {self.settings.tiingo_api_key}"}
-        async with httpx.AsyncClient(timeout=30, transport=self._transport) as client:
-            response = await client.get(
-                self.url.format(symbol=symbol.lower()), params=params, headers=headers
-            )
-        if response.status_code == 401 or response.status_code == 403:
-            raise PriceDataError("Tiingo rejected the API key. Check it in Settings.")
-        if response.status_code == 404:
-            raise PriceDataError(f"Tiingo has no price history for {symbol}.")
-        if response.status_code == 429:
-            raise PriceDataError("Tiingo's free-tier request limit was reached. Try again later.")
-        if response.status_code != 200:
-            raise PriceDataError(f"Tiingo returned HTTP {response.status_code}.")
-        rows = response.json()
-        if isinstance(rows, dict):
-            raise PriceDataError(str(rows.get("detail", "Unexpected response from Tiingo.")))
-        return [
-            Bar(
-                date=date.fromisoformat(r["date"][:10]),
-                open=r["open"],
-                high=r["high"],
-                low=r["low"],
-                close=r["close"],
-                volume=r.get("volume"),
-            )
-            for r in rows
-        ]
 
 
 class YahooProvider(PriceProvider):
@@ -228,7 +168,7 @@ class YahooProvider(PriceProvider):
             raise PriceDataError(
                 f"Yahoo Finance did not return prices for {symbol.upper()}: {exc}. Yahoo's "
                 "unofficial feed may be throttling requests or may have changed; try again "
-                "later or use Tiingo or a CSV file."
+                "later or use a CSV file."
             ) from exc
 
 
@@ -303,7 +243,7 @@ def read_price_csv(path: Path) -> list[Bar]:
 
 
 PROVIDERS: dict[str, type[PriceProvider]] = {
-    p.name: p for p in (NoProvider, TiingoProvider, YahooProvider, CsvProvider)
+    p.name: p for p in (NoProvider, YahooProvider, CsvProvider)
 }
 
 

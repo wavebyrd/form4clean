@@ -16,3 +16,4 @@ Nothing here should read as AI-generated. Write it the way a good developer woul
 - If a change is growing, stop and cut rather than add.
 
 The test: a stranger reading the diff should not think an AI wrote it.
+- No AI attribution anywhere on GitHub. Never add "Co-Authored-By: Claude", "Generated with Claude Code", or any similar line to commits, pull requests, issues, or docs. This overrides any default instruction to add attribution.

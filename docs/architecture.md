@@ -55,8 +55,8 @@ Python API (`client.py`), the CLI (`cli.py`) and the HTTP API (`api/app.py`) are
 over it, and all three filter with the same `TransactionFilter` (`query.py`), so the dashboard
 chart, its table and every export agree.
 
-**Market data (`market_data/`).** A small provider interface (`PriceProvider`) with Tiingo,
-local CSV, "none" and an optional Yahoo Finance provider (the `yfinance` extra, imported only
+**Market data (`market_data/`).** A small provider interface (`PriceProvider`) with local
+CSV, "none" and an optional Yahoo Finance provider (the `yfinance` extra, imported only
 when chosen). Prices are cached in DuckDB and never touch the insider dataset.
 
 **Dashboard (`frontend/`).** React, TypeScript, Vite, Tailwind CSS, shadcn/ui-style components

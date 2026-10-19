@@ -26,5 +26,5 @@ First release. Schema 1.0.0, cleaning rules 1.0.0.
 - Local dashboard: overview, price chart with insider markers on the disclosure session,
   filters shared by chart and table, transaction table, data quality explorer, exports,
   settings, dark and light themes
-- Price providers: Tiingo (free key), local CSV, none, and an optional Yahoo Finance provider
-  (`form4clean[yfinance]` extra, never installed by default)
+- Price providers: an optional Yahoo Finance provider (`form4clean[yfinance]` extra, never
+  installed by default), local CSV, or none
