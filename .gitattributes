@@ -1,0 +1,6 @@
+* text=auto eol=lf
+*.png binary
+*.parquet binary
+src/form4clean/api/static/** linguist-generated
+docs/schema.md linguist-generated
+docs/quality-flags.md linguist-generated

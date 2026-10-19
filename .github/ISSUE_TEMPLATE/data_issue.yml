@@ -1,0 +1,33 @@
+name: Data issue
+description: A record is parsed, cleaned, classified or reconciled incorrectly.
+labels: [data]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Data issues are the most useful reports we get. The accession number lets anyone open
+        the original filing on sec.gov and check.
+  - type: input
+    id: accession
+    attributes:
+      label: Accession number
+      placeholder: 0001197647-26-000011
+    validations:
+      required: true
+  - type: input
+    id: transaction
+    attributes:
+      label: transaction_id (if known)
+      placeholder: f4c_8f4aa97bfb0587b58ded
+  - type: textarea
+    id: wrong
+    attributes:
+      label: What is wrong
+      description: The field, the value Form4Clean produced, and the value the filing supports.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Cleaning version
+      description: The `cleaning_version` column, or `form4clean --version`.

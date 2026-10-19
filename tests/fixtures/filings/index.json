@@ -1,0 +1,14 @@
+{
+  "f01_sale_10b5_1.xml": {"accession": "0000999101-25-000003", "form": "4", "filed": "20250305", "accepted": "20250305163012"},
+  "f02_option_exercise.xml": {"accession": "0000999102-22-000007", "form": "4", "filed": "20220817", "accepted": "20220817200501"},
+  "f03_edge_cases.xml": {"accession": "0000999105-25-000002", "form": "4", "filed": "20250502", "accepted": "20250502071500"},
+  "f04_joint_filing.xml": {"accession": "0000999104-25-000004", "form": "4", "filed": "20250610", "accepted": "20250610113000"},
+  "f04b_joint_separate.xml": {"accession": "0000999106-25-000001", "form": "4", "filed": "20250610", "accepted": "20250610120500"},
+  "f05_original.xml": {"accession": "0000999101-25-000005", "form": "4", "filed": "20250403", "accepted": "20250403164500"},
+  "f06_amendment_correction.xml": {"accession": "0000999101-25-000006", "form": "4/A", "filed": "20250421", "accepted": "20250421090000"},
+  "f07_amendment_date_fix.xml": {"accession": "0000999101-25-000007", "form": "4/A", "filed": "20250501", "accepted": "20250501151500"},
+  "f08a_cfo_first.xml": {"accession": "0000999102-25-000011", "form": "4", "filed": "20250602", "accepted": "20250602170000"},
+  "f08b_cfo_second.xml": {"accession": "0000999102-25-000012", "form": "4", "filed": "20250602", "accepted": "20250602171500"},
+  "f08c_cfo_amendment.xml": {"accession": "0000999102-25-000013", "form": "4/A", "filed": "20250620", "accepted": "20250620100000"},
+  "f09_amendment_orphan.xml": {"accession": "0000999105-25-000001", "form": "4/A", "filed": "20250418", "accepted": "20250418103000"}
+}

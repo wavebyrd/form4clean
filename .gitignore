@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+build/
+dist/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Node
+frontend/node_modules/
+frontend/coverage/
+*.tsbuildinfo
+
+# Form4Clean outputs
+form4clean_exports/
+*.duckdb
+*.duckdb.wal
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# The built dashboard in src/form4clean/api/static is committed on purpose so that
+# `pip install` works without Node.
