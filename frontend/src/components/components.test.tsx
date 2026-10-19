@@ -5,11 +5,12 @@ import { describe, expect, it, vi } from 'vitest'
 
 import { AppStateProvider, useAppState } from '@/hooks/useAppState'
 import { DEFAULT_FILTERS } from '@/lib/filters'
+import { disclosureNote } from '@/lib/format'
 import { tx } from '@/test/fixtures'
 
 import { StatusBadge } from './common'
 import { FilterBar } from './FilterBar'
-import { TransactionFacts, disclosureNote } from './TransactionDetail'
+import { TransactionFacts } from './TransactionDetail'
 import { TransactionTable } from './TransactionTable'
 
 function WithState({ children }: { children: React.ReactNode }) {

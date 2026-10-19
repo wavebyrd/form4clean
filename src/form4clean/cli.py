@@ -24,7 +24,7 @@ from .exports.writer import FORMATS
 from .market_data.providers import PROVIDERS
 from .query import TransactionFilter
 from .sec.client import SecError
-from .sec.edgar import CompanyNotFoundError
+from .sec.edgar import CompanyNotFoundError, pad_cik
 from .service import Form4Service, years_ago
 from .storage.store import StoreError
 
@@ -173,6 +173,12 @@ def fetch(
             console.print(f"  [yellow]Could not parse {acc}:[/] {msg}")
         for acc, msg in summary.download_errors:
             console.print(f"  [red]Could not download {acc}:[/] {msg}")
+        other = service.store.other_issuer_filings(pad_cik(c.cik))
+        if other:
+            console.print(
+                f"  {other} of these were filed by {c.name} as an owner of another company's "
+                "shares and are not included."
+            )
         result = service.clean(c)
         _print_clean_summary(result.report.model_dump())
         if summary.download_errors:

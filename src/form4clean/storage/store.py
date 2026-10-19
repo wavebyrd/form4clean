@@ -263,6 +263,15 @@ class Store:
         filings = [ParsedFiling.model_validate_json(row[0]) for row in ok]
         return filings, [(a, e or "") for a, e in failed]
 
+    def other_issuer_filings(self, cik: str) -> int:
+        """Filings listed under this CIK where it reported as an owner of another company."""
+        with self.connect() as con:
+            row = con.execute(
+                "SELECT count(*) FROM filings WHERE fetched_for_cik = ? AND issuer_cik != ?",
+                [cik, cik],
+            ).fetchone()
+        return int(row[0]) if row else 0
+
     def raw_xml(self, accession: str) -> str | None:
         with self.connect() as con:
             row = con.execute(

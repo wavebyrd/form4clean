@@ -30,10 +30,15 @@ def overview(df: pl.DataFrame, *, today: date | None = None, months: int = 12) -
     sells = window.filter(pl.col("transaction_code") == "S")
     planned = sells.filter(pl.col("is_10b5_1") == True)  # noqa: E712
 
+    # Group by CIK only: an insider whose role changes (CFO, then adviser) is still one person.
+    # Name and role come from their latest trade.
     top = (
         window.filter(pl.col("transaction_code").is_in(["P", "S"]))
-        .group_by("insider_cik", "insider_name", "insider_role")
+        .sort("transaction_date", "accession_number")
+        .group_by("insider_cik")
         .agg(
+            pl.col("insider_name").last(),
+            pl.col("insider_role").last(),
             pl.col("transaction_value")
             .filter(pl.col("transaction_code") == "P")
             .sum()

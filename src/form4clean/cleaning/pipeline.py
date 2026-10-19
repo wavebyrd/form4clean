@@ -193,7 +193,9 @@ def _flag_duplicates(drafts_by_acc: dict[str, list[Draft]], drafts: list[Draft])
 
     # Across filings, identical trade terms alone are common (standard award sizes go to many
     # insiders on the same day). Joint filers reporting the same trade separately also report
-    # the same holdings afterwards, so holdings and ownership are part of the key.
+    # the same holdings afterwards, so holdings and ownership are part of the key. Two different
+    # people cannot both own the same shares directly, so direct holdings only match the same
+    # insider (co-founders with identical grants file identical rows).
     groups: dict[tuple[object, ...], list[Draft]] = defaultdict(list)
     for d in drafts:
         r = d.record
@@ -204,7 +206,8 @@ def _flag_duplicates(drafts_by_acc: dict[str, list[Draft]], drafts: list[Draft])
             or r.shares_owned_after is None
         ):
             continue
-        groups[(*d.economic_key, r.shares_owned_after, r.ownership_type)].append(d)
+        owner = r.insider_cik if r.ownership_type == "Direct" else None
+        groups[(*d.economic_key, r.shares_owned_after, r.ownership_type, owner)].append(d)
     for group in groups.values():
         accessions = {d.record.accession_number for d in group}
         if len(accessions) < 2:

@@ -49,6 +49,33 @@ def test_equal_awards_to_different_insiders_are_not_duplicates() -> None:
     assert all("POSSIBLE_DUPLICATE_ACROSS_FILINGS" not in r.quality_flags for r in res.transactions)
 
 
+def test_identical_direct_holdings_of_different_insiders_are_not_duplicates() -> None:
+    # Co-founders with identical grant schedules file identical rows, holdings included.
+    first = parsed("f08a_cfo_first.xml")
+    other = first.model_copy(
+        update={
+            "accession_number": "0000999107-25-000001",
+            "reporting_owners": [
+                o.model_copy(update={"cik": "0000999107", "name": "LEE SAM"})
+                for o in first.reporting_owners
+            ],
+        }
+    )
+    res = clean([first, other], COMPANY)
+    assert {r.ownership_type for r in res.transactions} == {"Direct"}
+    assert all("POSSIBLE_DUPLICATE_ACROSS_FILINGS" not in r.quality_flags for r in res.transactions)
+
+
+def test_same_insider_filing_a_trade_twice_is_flagged() -> None:
+    first = parsed("f08a_cfo_first.xml")
+    again = first.model_copy(update={"accession_number": "0000999107-25-000002"})
+    res = clean([first, again], COMPANY)
+    flagged = [
+        r for r in res.transactions if "POSSIBLE_DUPLICATE_ACROSS_FILINGS" in r.quality_flags
+    ]
+    assert len(flagged) == 2 * len(first.transactions)
+
+
 def test_all_fixture_accessions_are_unique() -> None:
     accessions = [m["accession"] for m in INDEX.values()]
     assert len(accessions) == len(set(accessions))

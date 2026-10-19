@@ -1,6 +1,8 @@
 // Display formatting. Values arrive as exact decimal strings; they are converted to numbers
 // only for display, never for further calculation.
 
+import type { Transaction } from '@/types/api'
+
 const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 2 })
 const whole = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 })
 const exact = new Intl.NumberFormat('en-US', { maximumFractionDigits: 4 })
@@ -80,4 +82,19 @@ export function titleCase(text: string): string {
     .split('_')
     .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
     .join(' ')
+}
+
+export function disclosureNote(t: Transaction): string {
+  switch (t.disclosure_timing) {
+    case 'AFTER_CLOSE':
+      return `Filed after the market close. The first regular session after disclosure was ${fmtDate(t.disclosure_session_date)}.`
+    case 'PRE_MARKET':
+      return `Filed before the market opened; public for the ${fmtDate(t.disclosure_session_date)} session.`
+    case 'MARKET_HOURS':
+      return `Filed during market hours on ${fmtDate(t.disclosure_session_date)}; not known before that time.`
+    case 'NON_TRADING_DAY':
+      return `Filed on a day the market was closed. The first session after disclosure was ${fmtDate(t.disclosure_session_date)}.`
+    default:
+      return 'The filing has no acceptance timestamp, so its disclosure session is unknown.'
+  }
 }

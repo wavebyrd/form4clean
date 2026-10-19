@@ -120,6 +120,8 @@ classification confidence to LOW; both values are kept as filed.
   shares, price, direction, security, holdings after the trade and ownership type are flagged
   and linked. This catches related owners (a fund and its general partner) who each file the
   same trade, without flagging the common case of equal award sizes given to many insiders.
+  Directly held shares only match the same insider, because two people cannot both own the same
+  shares directly; insiders with identical grants (such as co-founders) are not flagged.
 * **Holdings continuity.** Within a filing, for the same security and ownership, each row's
   holdings after the trade should equal the previous row's plus or minus this trade.
 * **Price outliers.** A P or S common-stock price more than 50% away from the median of at

@@ -8,6 +8,7 @@ import { Badge, Skeleton } from '@/components/ui/primitives'
 import { useAppState } from '@/hooks/useAppState'
 import { api } from '@/lib/api'
 import {
+  disclosureNote,
   fmtDate,
   fmtMoney,
   fmtPrice,
@@ -34,21 +35,6 @@ function Section({ title, children }: { title: string; children: React.ReactNode
       {children}
     </section>
   )
-}
-
-export function disclosureNote(t: Transaction): string {
-  switch (t.disclosure_timing) {
-    case 'AFTER_CLOSE':
-      return `Filed after the market close. The first regular session after disclosure was ${fmtDate(t.disclosure_session_date)}.`
-    case 'PRE_MARKET':
-      return `Filed before the market opened; public for the ${fmtDate(t.disclosure_session_date)} session.`
-    case 'MARKET_HOURS':
-      return `Filed during market hours on ${fmtDate(t.disclosure_session_date)}; not known before that time.`
-    case 'NON_TRADING_DAY':
-      return `Filed on a day the market was closed. The first session after disclosure was ${fmtDate(t.disclosure_session_date)}.`
-    default:
-      return 'The filing has no acceptance timestamp, so its disclosure session is unknown.'
-  }
 }
 
 export function TransactionFacts({ t }: { t: Transaction }) {
